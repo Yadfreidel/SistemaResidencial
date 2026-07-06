@@ -7,10 +7,6 @@ using System.Collections.ObjectModel;
 
 namespace SistemaResidencial.ViewModels
 {
-    /// <summary>
-    /// ViewModel del Dashboard para Recepcionistas.
-    /// Vista reducida: muestra pagos pendientes del día y contratos próximos a vencer.
-    /// </summary>
     public partial class DashboardRecepcionistaViewModel : BaseViewModel
     {
         private readonly IContratoRepository _contratoRepo;
@@ -18,23 +14,18 @@ namespace SistemaResidencial.ViewModels
         private readonly SesionService _sesionService;
         private readonly NavigationService _navigationService;
 
-        // Nombre de bienvenida
         [ObservableProperty]
         private string _bienvenida = string.Empty;
 
-        // Contratos activos sin pago registrado este mes (morosos)
         [ObservableProperty]
         private ObservableCollection<Contrato> _pagosPendientes = new();
 
-        // Contratos que vencen en los próximos 30 días
         [ObservableProperty]
         private ObservableCollection<Contrato> _contratosProximosVencer = new();
 
-        // Número total de pagos pendientes
         [ObservableProperty]
         private int _totalPendientes;
 
-        // Número de contratos por vencer
         [ObservableProperty]
         private int _totalProximosVencer;
 
@@ -52,9 +43,6 @@ namespace SistemaResidencial.ViewModels
             Titulo = "Dashboard — Recepcionista";
         }
 
-        /// <summary>
-        /// Carga los datos de pagos pendientes y contratos por vencer.
-        /// </summary>
         [RelayCommand]
         private void CargarDatos()
         {
@@ -63,7 +51,6 @@ namespace SistemaResidencial.ViewModels
 
             try
             {
-                // Bienvenida personalizada
                 if (_sesionService.UsuarioActual != null)
                     Bienvenida = $"Bienvenido, {_sesionService.UsuarioActual.NombreUsuario}";
 
@@ -75,18 +62,15 @@ namespace SistemaResidencial.ViewModels
                 PagosPendientes.Clear();
                 ContratosProximosVencer.Clear();
 
-                // Obtener contratos activos
                 var contratosActivos = _contratoRepo.ObtenerContratosActivos();
 
                 foreach (var contrato in contratosActivos)
                 {
-                    // Agregar a pendientes si no tiene pago registrado este mes
                     if (!_pagoRepo.PagoMesRegistrado(contrato.Id, mesActual, anioActual))
                     {
                         PagosPendientes.Add(contrato);
                     }
 
-                    // Agregar a próximos a vencer si la fecha de fin está en los próximos 30 días
                     if (contrato.FechaFin >= hoy && contrato.FechaFin <= en30Dias)
                     {
                         ContratosProximosVencer.Add(contrato);
@@ -106,36 +90,24 @@ namespace SistemaResidencial.ViewModels
             }
         }
 
-        /// <summary>
-        /// Navega a la vista de Apartamentos.
-        /// </summary>
         [RelayCommand]
         private void IrAApartamentos()
         {
             _navigationService.Navegar("Apartamento");
         }
 
-        /// <summary>
-        /// Navega a la vista de Inquilinos.
-        /// </summary>
         [RelayCommand]
         private void IrAInquilinos()
         {
             _navigationService.Navegar("Inquilino");
         }
 
-        /// <summary>
-        /// Navega a la vista de Contratos.
-        /// </summary>
         [RelayCommand]
         private void IrAContratos()
         {
             _navigationService.Navegar("Contrato");
         }
 
-        /// <summary>
-        /// Navega a la vista de Pagos.
-        /// </summary>
         [RelayCommand]
         private void IrAPagos()
         {

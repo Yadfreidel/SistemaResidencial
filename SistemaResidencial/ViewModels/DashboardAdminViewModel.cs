@@ -6,11 +6,6 @@ using System.Collections.ObjectModel;
 
 namespace SistemaResidencial.ViewModels
 {
-    /// <summary>
-    /// ViewModel del Dashboard para Administradores.
-    /// Muestra métricas clave: total de apartamentos, contratos activos, pagos del mes y morosos.
-    /// También expone datos para gráficos de ocupación e ingresos mensuales.
-    /// </summary>
     public partial class DashboardAdminViewModel : BaseViewModel
     {
         private readonly IApartamentoRepository _apartamentoRepo;
@@ -18,8 +13,6 @@ namespace SistemaResidencial.ViewModels
         private readonly IPagoRepository _pagoRepo;
         private readonly SesionService _sesionService;
         private readonly NavigationService _navigationService;
-
-        // ─── Métricas principales (tarjetas del dashboard) ───────────────────
 
         [ObservableProperty]
         private int _totalApartamentos;
@@ -37,22 +30,17 @@ namespace SistemaResidencial.ViewModels
         private decimal _ingresosMes;
 
         [ObservableProperty]
-        private int _morosos; // Contratos con pagos pendientes
+        private int _morosos;
 
         [ObservableProperty]
         private int _pagosDelMes;
 
-        // ─── Datos para gráficos ─────────────────────────────────────────────
-
-        // Lista de meses con sus ingresos (para gráfico de barras)
         [ObservableProperty]
         private ObservableCollection<IngresoMes> _ingresoPorMes = new();
 
-        // Porcentaje de ocupación (para gráfico circular)
         [ObservableProperty]
         private double _porcentajeOcupacion;
 
-        // Nombre del usuario administrador logueado
         [ObservableProperty]
         private string _bienvenida = string.Empty;
 
@@ -72,9 +60,6 @@ namespace SistemaResidencial.ViewModels
             Titulo = "Dashboard — Administrador";
         }
 
-        /// <summary>
-        /// Carga todas las métricas del dashboard. Se llama al navegar a esta vista.
-        /// </summary>
         [RelayCommand]
         private void CargarDatos()
         {
@@ -83,11 +68,9 @@ namespace SistemaResidencial.ViewModels
 
             try
             {
-                // Mensaje de bienvenida personalizado
                 if (_sesionService.UsuarioActual != null)
                     Bienvenida = $"Bienvenido, {_sesionService.UsuarioActual.NombreUsuario}";
 
-                // Métricas de apartamentos
                 var todosLosApartamentos = _apartamentoRepo.ObtenerTodos();
                 TotalApartamentos = todosLosApartamentos.Count();
 
@@ -97,16 +80,13 @@ namespace SistemaResidencial.ViewModels
                 ApartamentosOcupados = _apartamentoRepo
                     .ObtenerPorEstado(Models.EstadoApartamento.Ocupado).Count();
 
-                // Porcentaje de ocupación
                 PorcentajeOcupacion = TotalApartamentos > 0
                     ? (double)ApartamentosOcupados / TotalApartamentos * 100
                     : 0;
 
-                // Métricas de contratos
                 var contratos = _contratoRepo.ObtenerContratosActivos();
                 ContratosActivos = contratos.Count();
 
-                // Métricas de pagos del mes actual
                 int mesActual = DateTime.Now.Month;
                 int anioActual = DateTime.Now.Year;
 
@@ -116,7 +96,6 @@ namespace SistemaResidencial.ViewModels
 
                 foreach (var contrato in todosLosContratos)
                 {
-                    // Verificar si ya se realizó el pago del mes para este contrato
                     if (_pagoRepo.PagoMesRegistrado(contrato.Id, mesActual, anioActual))
                     {
                         totalPagosDelMes++;
@@ -127,11 +106,9 @@ namespace SistemaResidencial.ViewModels
                 PagosDelMes = totalPagosDelMes;
                 IngresosMes = ingresosTotales;
 
-                // Calcular morosos: contratos activos sin pago del mes actual
                 Morosos = ContratosActivos - PagosDelMes;
                 if (Morosos < 0) Morosos = 0;
 
-                // Cargar datos para gráfico de ingresos por mes (últimos 6 meses)
                 CargarIngresoPorMes();
             }
             catch (Exception ex)
@@ -144,9 +121,6 @@ namespace SistemaResidencial.ViewModels
             }
         }
 
-        /// <summary>
-        /// Construye la colección de ingresos por mes para los últimos 6 meses.
-        /// </summary>
         private void CargarIngresoPorMes()
         {
             IngresoPorMes.Clear();
@@ -174,36 +148,24 @@ namespace SistemaResidencial.ViewModels
             }
         }
 
-        /// <summary>
-        /// Navega a la vista de Apartamentos.
-        /// </summary>
         [RelayCommand]
         private void IrAApartamentos()
         {
             _navigationService.Navegar("Apartamento");
         }
 
-        /// <summary>
-        /// Navega a la vista de Inquilinos.
-        /// </summary>
         [RelayCommand]
         private void IrAInquilinos()
         {
             _navigationService.Navegar("Inquilino");
         }
 
-        /// <summary>
-        /// Navega a la vista de Contratos.
-        /// </summary>
         [RelayCommand]
         private void IrAContratos()
         {
             _navigationService.Navegar("Contrato");
         }
 
-        /// <summary>
-        /// Navega a la vista de Pagos.
-        /// </summary>
         [RelayCommand]
         private void IrAPagos()
         {
@@ -211,9 +173,6 @@ namespace SistemaResidencial.ViewModels
         }
     }
 
-    /// <summary>
-    /// Clase auxiliar para representar el ingreso de un mes en el gráfico.
-    /// </summary>
     public class IngresoMes
     {
         public string Mes { get; set; } = string.Empty;
