@@ -4,7 +4,7 @@ using System.Text;
 
 namespace SistemaResidencial.Data
 {
-    internal class DbInitializer
+    public class DbInitializer
     {
     }
 }
