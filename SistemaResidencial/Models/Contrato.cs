@@ -13,10 +13,10 @@ namespace SistemaResidencial.Models
         public decimal MontoMensual { get; set; }
         public decimal Deposito { get; set; }
         public bool Estado { get; set; }
-        public string Observaciones { get; set; }
+        public string Observaciones { get; set; } = string.Empty;
 
-        public virtual Apartamento Apartamento { get; set; }
-        public virtual Inquilino Inquilino { get; set; }
+        public virtual Apartamento Apartamento { get; set; } = null!;
+        public virtual Inquilino Inquilino { get; set; } = null!;
         public virtual ICollection<Pago> Pagos { get; set; } = new List<Pago>();
     }
 }
