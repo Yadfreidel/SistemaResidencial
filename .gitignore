@@ -353,6 +353,11 @@ ASALocalRun/
 # BeatPulse healthcheck temp database
 healthchecksdb
 
+# Base de datos SQLite local (se genera automáticamente al arrancar la app)
+*.db
+*.db-shm
+*.db-wal
+
 # Backup folder for Package Reference Convert tool in Visual Studio 2017
 MigrationBackup/
 

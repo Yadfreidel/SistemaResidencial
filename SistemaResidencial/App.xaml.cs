@@ -79,7 +79,13 @@ namespace SistemaResidencial
             }
 
             // ─── Arrancar la aplicación mostrando el Login ────────────────────
+            // Se crea primero la ventana (y su MainViewModel) para que quede
+            // suscrita al evento de navegación antes de navegar al Login.
             var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
+
+            var navigationService = ServiceProvider.GetRequiredService<NavigationService>();
+            navigationService.Navegar("Login");
+
             mainWindow.Show();
         }
     }

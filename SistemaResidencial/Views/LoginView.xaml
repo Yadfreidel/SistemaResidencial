@@ -1,0 +1,44 @@
+<UserControl x:Class="SistemaResidencial.Views.LoginView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d"
+             d:DesignHeight="600" d:DesignWidth="900">
+    <Grid Background="{DynamicResource MaterialDesignPaper}">
+        <materialDesign:Card Width="380" Height="Auto" Padding="32"
+                              HorizontalAlignment="Center" VerticalAlignment="Center"
+                              UniformCornerRadius="8">
+            <StackPanel>
+                <TextBlock Text="🏢" FontSize="48" HorizontalAlignment="Center" Margin="0,0,0,8" />
+                <TextBlock Text="Sistema Residencial" FontSize="22" FontWeight="Bold"
+                           HorizontalAlignment="Center" Margin="0,0,0,4" />
+                <TextBlock Text="Inicia sesión para continuar" FontSize="13" Opacity="0.6"
+                           HorizontalAlignment="Center" Margin="0,0,0,24" />
+
+                <TextBox materialDesign:HintAssist.Hint="Usuario"
+                         Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                         Text="{Binding NombreUsuario, UpdateSourceTrigger=PropertyChanged}"
+                         Margin="0,0,0,16" />
+
+                <PasswordBox x:Name="PasswordBox"
+                             materialDesign:HintAssist.Hint="Contraseña"
+                             Style="{StaticResource MaterialDesignOutlinedPasswordBox}"
+                             PasswordChanged="PasswordBox_PasswordChanged"
+                             Margin="0,0,0,8" />
+
+                <TextBlock Text="{Binding MensajeError}" Foreground="Red" FontSize="12"
+                           TextWrapping="Wrap" Margin="0,0,0,8" />
+
+                <Button Content="ENTRAR" Style="{StaticResource MaterialDesignRaisedButton}"
+                        Command="{Binding LoginCommand}"
+                        Margin="0,8,0,8" Height="40" />
+
+                <Button Content="Olvidé mi contraseña" Style="{StaticResource MaterialDesignFlatButton}"
+                        Command="{Binding OlvidePasswordCommand}"
+                        HorizontalAlignment="Center" FontSize="12" />
+            </StackPanel>
+        </materialDesign:Card>
+    </Grid>
+</UserControl>

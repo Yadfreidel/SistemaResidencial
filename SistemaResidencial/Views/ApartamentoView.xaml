@@ -4,9 +4,90 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SistemaResidencial.Views"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="600" d:DesignWidth="1000"
+             Loaded="UserControl_Loaded">
     <Grid>
-            
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <!-- ═══ Lista principal ═══ -->
+        <DockPanel Grid.Column="0" Margin="8">
+            <TextBlock DockPanel.Dock="Top" Text="{Binding Titulo}" FontSize="20" FontWeight="Bold" Margin="0,0,0,12" />
+
+            <!-- Barra de búsqueda y filtro -->
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,12">
+                <TextBox Width="220" materialDesign:HintAssist.Hint="Buscar por número o bloque"
+                         Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                         Text="{Binding TextoBusqueda, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,8,0" />
+                <Button Content="Buscar" Command="{Binding BuscarCommand}" Margin="0,0,8,0" />
+
+                <ComboBox Width="180" materialDesign:HintAssist.Hint="Filtrar por estado"
+                          Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                          ItemsSource="{Binding ListaEstados}" SelectedItem="{Binding FiltroEstado}"
+                          Margin="0,0,8,0" />
+                <Button Content="Filtrar" Command="{Binding FiltrarCommand}" Margin="0,0,8,0" />
+                <Button Content="Limpiar" Command="{Binding LimpiarFiltrosCommand}" Margin="0,0,16,0" />
+
+                <Button Content="+ Agregar" Style="{StaticResource MaterialDesignRaisedButton}"
+                        Command="{Binding AgregarCommand}" />
+            </StackPanel>
+
+            <DataGrid ItemsSource="{Binding ListaApartamentos}"
+                      SelectedItem="{Binding ApartamentoSeleccionado}"
+                      AutoGenerateColumns="False" IsReadOnly="True"
+                      SelectionMode="Single">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Número" Binding="{Binding Numero}" Width="*" />
+                    <DataGridTextColumn Header="Piso" Binding="{Binding Piso}" Width="*" />
+                    <DataGridTextColumn Header="Bloque" Binding="{Binding Bloque}" Width="*" />
+                    <DataGridTextColumn Header="Habitaciones" Binding="{Binding NumHabitaciones}" Width="*" />
+                    <DataGridTextColumn Header="m²" Binding="{Binding MetrosCuadrados}" Width="*" />
+                    <DataGridTextColumn Header="Precio" Binding="{Binding PrecioAlquiler, StringFormat={}{0:C}}" Width="*" />
+                    <DataGridTextColumn Header="Estado" Binding="{Binding Estado}" Width="*" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </DockPanel>
+
+        <!-- ═══ Sidebar: formulario de Agregar/Editar ═══ -->
+        <materialDesign:Card Grid.Column="1" Width="320" Padding="20" Margin="0,8,8,8"
+                              Visibility="{Binding SidebarVisible, Converter={StaticResource BoolToVis}}">
+            <StackPanel>
+                <TextBlock Text="{Binding ModoFormulario}" FontSize="18" FontWeight="Bold" Margin="0,0,0,16" />
+
+                <TextBox materialDesign:HintAssist.Hint="Número" Text="{Binding Numero, UpdateSourceTrigger=PropertyChanged}"
+                         Style="{StaticResource MaterialDesignOutlinedTextBox}" Margin="0,0,0,12" />
+                <TextBox materialDesign:HintAssist.Hint="Piso" Text="{Binding Piso, UpdateSourceTrigger=PropertyChanged}"
+                         Style="{StaticResource MaterialDesignOutlinedTextBox}" Margin="0,0,0,12" />
+                <TextBox materialDesign:HintAssist.Hint="Bloque" Text="{Binding Bloque, UpdateSourceTrigger=PropertyChanged}"
+                         Style="{StaticResource MaterialDesignOutlinedTextBox}" Margin="0,0,0,12" />
+                <TextBox materialDesign:HintAssist.Hint="Núm. habitaciones" Text="{Binding NumHabitaciones, UpdateSourceTrigger=PropertyChanged}"
+                         Style="{StaticResource MaterialDesignOutlinedTextBox}" Margin="0,0,0,12" />
+                <TextBox materialDesign:HintAssist.Hint="Metros cuadrados" Text="{Binding MetrosCuadrados, UpdateSourceTrigger=PropertyChanged}"
+                         Style="{StaticResource MaterialDesignOutlinedTextBox}" Margin="0,0,0,12" />
+                <TextBox materialDesign:HintAssist.Hint="Descripción" Text="{Binding Descripcion, UpdateSourceTrigger=PropertyChanged}"
+                         Style="{StaticResource MaterialDesignOutlinedTextBox}" Margin="0,0,0,12" />
+                <TextBox materialDesign:HintAssist.Hint="Precio alquiler" Text="{Binding PrecioAlquiler, UpdateSourceTrigger=PropertyChanged}"
+                         Style="{StaticResource MaterialDesignOutlinedTextBox}" Margin="0,0,0,12" />
+                <ComboBox materialDesign:HintAssist.Hint="Estado"
+                          Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                          ItemsSource="{Binding ListaEstados}" SelectedItem="{Binding EstadoSeleccionado}"
+                          Margin="0,0,0,12" />
+
+                <TextBlock Text="{Binding MensajeError}" Foreground="Red" FontSize="12" TextWrapping="Wrap" Margin="0,0,0,8" />
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Content="Eliminar" Foreground="Red" Style="{StaticResource MaterialDesignFlatButton}"
+                            Command="{Binding EliminarCommand}" Margin="0,0,8,0" />
+                    <Button Content="Cancelar" Style="{StaticResource MaterialDesignFlatButton}"
+                            Command="{Binding CerrarSidebarCommand}" Margin="0,0,8,0" />
+                    <Button Content="Guardar" Style="{StaticResource MaterialDesignRaisedButton}"
+                            Command="{Binding GuardarCommand}" />
+                </StackPanel>
+            </StackPanel>
+        </materialDesign:Card>
     </Grid>
 </UserControl>

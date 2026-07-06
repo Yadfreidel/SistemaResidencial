@@ -1,18 +1,18 @@
-﻿using System.Windows.Controls;
+using System.Windows.Controls;
 using SistemaResidencial.ViewModels;
 
 namespace SistemaResidencial.Views
 {
-    public partial class ApartamentoView : UserControl
+    public partial class DashboardRecepcionistaView : UserControl
     {
-        public ApartamentoView()
+        public DashboardRecepcionistaView()
         {
             InitializeComponent();
         }
 
         private void UserControl_Loaded(object sender, System.Windows.RoutedEventArgs e)
         {
-            if (DataContext is ApartamentoViewModel viewModel)
+            if (DataContext is DashboardRecepcionistaViewModel viewModel)
             {
                 viewModel.CargarDatosCommand.Execute(null);
             }

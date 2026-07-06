@@ -1,15 +1,48 @@
 <Application x:Class="SistemaResidencial.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:SistemaResidencial">
+             xmlns:local="clr-namespace:SistemaResidencial"
+             xmlns:vm="clr-namespace:SistemaResidencial.ViewModels"
+             xmlns:views="clr-namespace:SistemaResidencial.Views"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.Blue.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.LightBlue.xaml" />
+                <materialDesign:BundledTheme BaseTheme="Light" PrimaryColor="Blue" SecondaryColor="Blue" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign3.Defaults.xaml" />
             </ResourceDictionary.MergedDictionaries>
+
+            <BooleanToVisibilityConverter x:Key="BoolToVis" />
+
+            <!-- Plantillas que asocian cada ViewModel con su Vista (XAML). -->
+            <!-- El ContentControl de MainWindow usa esto para mostrar la vista correcta automáticamente. -->
+            <DataTemplate DataType="{x:Type vm:LoginViewModel}">
+                <views:LoginView />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:DashboardAdminViewModel}">
+                <views:DashboardAdminView />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:DashboardRecepcionistaViewModel}">
+                <views:DashboardRecepcionistaView />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:DashboardUsuarioViewModel}">
+                <views:DashboardUsuarioView />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:ApartamentoViewModel}">
+                <views:ApartamentoView />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:InquilinoViewModel}">
+                <views:InquilinoView />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:ContratoViewModel}">
+                <views:ContratoView />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:PagoViewModel}">
+                <views:PagoView />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:CambiarPasswordViewModel}">
+                <views:CambiarPasswordView />
+            </DataTemplate>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

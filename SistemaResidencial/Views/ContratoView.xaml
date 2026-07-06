@@ -4,9 +4,80 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SistemaResidencial.Views"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="600" d:DesignWidth="1000"
+             Loaded="UserControl_Loaded">
     <Grid>
-            
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <!-- ═══ Lista principal ═══ -->
+        <DockPanel Grid.Column="0" Margin="8">
+            <TextBlock DockPanel.Dock="Top" Text="{Binding Titulo}" FontSize="20" FontWeight="Bold" Margin="0,0,0,12" />
+
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,12" HorizontalAlignment="Right">
+                <Button Content="+ Nuevo contrato" Style="{StaticResource MaterialDesignRaisedButton}"
+                        Command="{Binding AgregarCommand}" />
+            </StackPanel>
+
+            <DataGrid ItemsSource="{Binding ListaContratos}"
+                      SelectedItem="{Binding ContratoSeleccionado}"
+                      AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Single">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Inquilino" Binding="{Binding Inquilino.Nombre}" Width="*" />
+                    <DataGridTextColumn Header="Apartamento" Binding="{Binding Apartamento.Numero}" Width="*" />
+                    <DataGridTextColumn Header="Fecha inicio" Binding="{Binding FechaInicio, StringFormat=d}" Width="*" />
+                    <DataGridTextColumn Header="Fecha fin" Binding="{Binding FechaFin, StringFormat=d}" Width="*" />
+                    <DataGridTextColumn Header="Monto mensual" Binding="{Binding MontoMensual, StringFormat={}{0:C}}" Width="*" />
+                    <DataGridTextColumn Header="Activo" Binding="{Binding Estado}" Width="*" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </DockPanel>
+
+        <!-- ═══ Sidebar: nuevo contrato ═══ -->
+        <materialDesign:Card Grid.Column="1" Width="340" Padding="20" Margin="0,8,8,8"
+                              Visibility="{Binding SidebarVisible, Converter={StaticResource BoolToVis}}">
+            <StackPanel>
+                <TextBlock Text="Nuevo contrato" FontSize="18" FontWeight="Bold" Margin="0,0,0,16" />
+
+                <ComboBox materialDesign:HintAssist.Hint="Inquilino"
+                          Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                          ItemsSource="{Binding ListaInquilinos}" SelectedItem="{Binding InquilinoSeleccionado}"
+                          DisplayMemberPath="Nombre" Margin="0,0,0,12" />
+
+                <ComboBox materialDesign:HintAssist.Hint="Apartamento (disponibles)"
+                          Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                          ItemsSource="{Binding ListaApartamentosDisponibles}" SelectedItem="{Binding ApartamentoSeleccionado}"
+                          DisplayMemberPath="Numero" Margin="0,0,0,12" />
+
+                <DatePicker materialDesign:HintAssist.Hint="Fecha de inicio"
+                            Style="{StaticResource MaterialDesignOutlinedDatePicker}"
+                            SelectedDate="{Binding FechaInicio}" Margin="0,0,0,12" />
+
+                <DatePicker materialDesign:HintAssist.Hint="Fecha de fin (mín. 1 año)"
+                            Style="{StaticResource MaterialDesignOutlinedDatePicker}"
+                            SelectedDate="{Binding FechaFin}" Margin="0,0,0,12" />
+
+                <TextBox materialDesign:HintAssist.Hint="Monto mensual" Text="{Binding MontoMensual, UpdateSourceTrigger=PropertyChanged}"
+                         Style="{StaticResource MaterialDesignOutlinedTextBox}" Margin="0,0,0,12" />
+                <TextBox materialDesign:HintAssist.Hint="Depósito" Text="{Binding Deposito, UpdateSourceTrigger=PropertyChanged}"
+                         Style="{StaticResource MaterialDesignOutlinedTextBox}" Margin="0,0,0,12" />
+                <TextBox materialDesign:HintAssist.Hint="Observaciones" Text="{Binding Observaciones, UpdateSourceTrigger=PropertyChanged}"
+                         Style="{StaticResource MaterialDesignOutlinedTextBox}" AcceptsReturn="True" Height="60"
+                         TextWrapping="Wrap" Margin="0,0,0,12" />
+
+                <TextBlock Text="{Binding MensajeError}" Foreground="Red" FontSize="12" TextWrapping="Wrap" Margin="0,0,0,8" />
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Content="Cancelar" Style="{StaticResource MaterialDesignFlatButton}"
+                            Command="{Binding CerrarSidebarCommand}" Margin="0,0,8,0" />
+                    <Button Content="Guardar" Style="{StaticResource MaterialDesignRaisedButton}"
+                            Command="{Binding GuardarCommand}" />
+                </StackPanel>
+            </StackPanel>
+        </materialDesign:Card>
     </Grid>
 </UserControl>

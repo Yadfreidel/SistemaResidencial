@@ -4,9 +4,89 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SistemaResidencial.Views"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="600" d:DesignWidth="1000"
+             Loaded="UserControl_Loaded">
     <Grid>
-            
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <!-- ═══ Lista principal ═══ -->
+        <DockPanel Grid.Column="0" Margin="8">
+            <TextBlock DockPanel.Dock="Top" Text="{Binding Titulo}" FontSize="20" FontWeight="Bold" Margin="0,0,0,12" />
+
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,12">
+                <ComboBox Width="220" materialDesign:HintAssist.Hint="Filtrar por contrato"
+                          Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                          ItemsSource="{Binding ListaContratos}" SelectedItem="{Binding ContratoSeleccionado}"
+                          DisplayMemberPath="Id" Margin="0,0,8,0" />
+                <Button Content="Filtrar" Command="{Binding FiltrarPorContratoCommand}" Margin="0,0,16,0" />
+
+                <Button Content="+ Nuevo pago" Style="{StaticResource MaterialDesignRaisedButton}"
+                        Command="{Binding NuevoPagoCommand}" HorizontalAlignment="Right" />
+            </StackPanel>
+
+            <DataGrid ItemsSource="{Binding ListaPagos}"
+                      SelectedItem="{Binding PagoSeleccionado}"
+                      AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Single">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Nº Recibo" Binding="{Binding NumeroRecibo}" Width="*" />
+                    <DataGridTextColumn Header="Fecha" Binding="{Binding FechaPago, StringFormat=d}" Width="*" />
+                    <DataGridTextColumn Header="Monto" Binding="{Binding Monto, StringFormat={}{0:C}}" Width="*" />
+                    <DataGridTextColumn Header="Método" Binding="{Binding MetodoPago}" Width="*" />
+                    <DataGridTextColumn Header="Referencia" Binding="{Binding Referencia}" Width="*" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </DockPanel>
+
+        <!-- ═══ Sidebar: nuevo pago ═══ -->
+        <materialDesign:Card Grid.Column="1" Width="320" Padding="20" Margin="0,8,8,8"
+                              Visibility="{Binding SidebarVisible, Converter={StaticResource BoolToVis}}">
+            <StackPanel>
+                <TextBlock Text="Registrar pago" FontSize="18" FontWeight="Bold" Margin="0,0,0,16" />
+
+                <ComboBox materialDesign:HintAssist.Hint="Contrato"
+                          Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                          ItemsSource="{Binding ListaContratos}" SelectedItem="{Binding ContratoSeleccionado}"
+                          DisplayMemberPath="Id" Margin="0,0,0,12" />
+
+                <DatePicker materialDesign:HintAssist.Hint="Fecha de pago"
+                            Style="{StaticResource MaterialDesignOutlinedDatePicker}"
+                            SelectedDate="{Binding FechaPago}" Margin="0,0,0,12" />
+
+                <TextBlock Margin="0,0,0,4">
+                    <Run Text="Monto base: " />
+                    <Run Text="{Binding MontoBase, StringFormat={}{0:C}, Mode=OneWay}" FontWeight="Bold" />
+                </TextBlock>
+                <TextBlock Margin="0,0,0,4" Visibility="{Binding TieneMora, Converter={StaticResource BoolToVis}}">
+                    <Run Text="Mora (3%): " Foreground="Red" />
+                    <Run Text="{Binding MontMora, StringFormat={}{0:C}, Mode=OneWay}" Foreground="Red" FontWeight="Bold" />
+                </TextBlock>
+                <TextBlock Margin="0,0,0,12">
+                    <Run Text="Total a pagar: " />
+                    <Run Text="{Binding MontoTotal, StringFormat={}{0:C}, Mode=OneWay}" FontWeight="Bold" FontSize="16" />
+                </TextBlock>
+
+                <ComboBox materialDesign:HintAssist.Hint="Método de pago"
+                          Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                          ItemsSource="{Binding ListaMetodosPago}" SelectedItem="{Binding MetodoPagoSeleccionado}"
+                          Margin="0,0,0,12" />
+
+                <TextBox materialDesign:HintAssist.Hint="Referencia" Text="{Binding Referencia, UpdateSourceTrigger=PropertyChanged}"
+                         Style="{StaticResource MaterialDesignOutlinedTextBox}" Margin="0,0,0,12" />
+
+                <TextBlock Text="{Binding MensajeError}" Foreground="Red" FontSize="12" TextWrapping="Wrap" Margin="0,0,0,8" />
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Content="Cancelar" Style="{StaticResource MaterialDesignFlatButton}"
+                            Command="{Binding CerrarSidebarCommand}" Margin="0,0,8,0" />
+                    <Button Content="Guardar" Style="{StaticResource MaterialDesignRaisedButton}"
+                            Command="{Binding GuardarCommand}" />
+                </StackPanel>
+            </StackPanel>
+        </materialDesign:Card>
     </Grid>
 </UserControl>

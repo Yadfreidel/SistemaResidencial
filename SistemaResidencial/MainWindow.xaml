@@ -4,9 +4,231 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SistemaResidencial"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Sistema Residencial" Height="700" Width="1150"
+        WindowStartupLocation="CenterScreen"
+        FontFamily="{materialDesign:MaterialDesignFont}">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition>
+                <ColumnDefinition.Style>
+                    <Style TargetType="ColumnDefinition">
+                        <Setter Property="Width" Value="220" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding MenuExpandido}" Value="False">
+                                <Setter Property="Width" Value="60" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ColumnDefinition.Style>
+            </ColumnDefinition>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
 
+        <!-- ═══ MENÚ LATERAL COLAPSABLE ═══ -->
+        <materialDesign:ColorZone Grid.Column="0" Mode="PrimaryDark">
+            <DockPanel>
+                <!-- Botón para expandir/contraer el menú -->
+                <Button DockPanel.Dock="Top"
+                        Style="{StaticResource MaterialDesignFlatButton}"
+                        Foreground="White"
+                        FontSize="18"
+                        Margin="4"
+                        HorizontalAlignment="Left"
+                        Command="{Binding AlternarMenuCommand}"
+                        Content="☰" />
+
+                <StackPanel DockPanel.Dock="Top">
+                    <Button Command="{Binding NavegarCommand}" CommandParameter="DashboardAdmin"
+                            Foreground="White"
+                            HorizontalContentAlignment="Left" Margin="4,2">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="🏠" FontSize="16" Margin="4,0" />
+                            <TextBlock Text="Dashboard" Margin="8,0,0,0"
+                                       Visibility="{Binding MenuExpandido, Converter={StaticResource BoolToVis}}" />
+                        </StackPanel>
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignFlatButton}">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding RolUsuario}" Value="Admin">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+
+                    <Button Command="{Binding NavegarCommand}" CommandParameter="DashboardRecepcionista"
+                            Foreground="White"
+                            HorizontalContentAlignment="Left" Margin="4,2">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="🏠" FontSize="16" Margin="4,0" />
+                            <TextBlock Text="Dashboard" Margin="8,0,0,0"
+                                       Visibility="{Binding MenuExpandido, Converter={StaticResource BoolToVis}}" />
+                        </StackPanel>
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignFlatButton}">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding RolUsuario}" Value="Recepcionista">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+
+                    <Button Command="{Binding NavegarCommand}" CommandParameter="DashboardUsuario"
+                            Foreground="White"
+                            HorizontalContentAlignment="Left" Margin="4,2">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="🏠" FontSize="16" Margin="4,0" />
+                            <TextBlock Text="Mi Dashboard" Margin="8,0,0,0"
+                                       Visibility="{Binding MenuExpandido, Converter={StaticResource BoolToVis}}" />
+                        </StackPanel>
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignFlatButton}">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding RolUsuario}" Value="Usuario">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+
+                    <Separator />
+
+                    <Button Command="{Binding NavegarCommand}" CommandParameter="Apartamento"
+                            Foreground="White"
+                            HorizontalContentAlignment="Left" Margin="4,2">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="🏢" FontSize="16" Margin="4,0" />
+                            <TextBlock Text="Apartamentos" Margin="8,0,0,0"
+                                       Visibility="{Binding MenuExpandido, Converter={StaticResource BoolToVis}}" />
+                        </StackPanel>
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignFlatButton}">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding RolUsuario}" Value="Admin">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding RolUsuario}" Value="Recepcionista">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+
+                    <Button Command="{Binding NavegarCommand}" CommandParameter="Inquilino"
+                            Foreground="White"
+                            HorizontalContentAlignment="Left" Margin="4,2">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="👤" FontSize="16" Margin="4,0" />
+                            <TextBlock Text="Inquilinos" Margin="8,0,0,0"
+                                       Visibility="{Binding MenuExpandido, Converter={StaticResource BoolToVis}}" />
+                        </StackPanel>
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignFlatButton}">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding RolUsuario}" Value="Admin">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding RolUsuario}" Value="Recepcionista">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+
+                    <Button Command="{Binding NavegarCommand}" CommandParameter="Contrato"
+                            Foreground="White"
+                            HorizontalContentAlignment="Left" Margin="4,2">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="📄" FontSize="16" Margin="4,0" />
+                            <TextBlock Text="Contratos" Margin="8,0,0,0"
+                                       Visibility="{Binding MenuExpandido, Converter={StaticResource BoolToVis}}" />
+                        </StackPanel>
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignFlatButton}">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding RolUsuario}" Value="Admin">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding RolUsuario}" Value="Recepcionista">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+
+                    <Button Command="{Binding NavegarCommand}" CommandParameter="Pago"
+                            Foreground="White"
+                            HorizontalContentAlignment="Left" Margin="4,2">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="💲" FontSize="16" Margin="4,0" />
+                            <TextBlock Text="Pagos" Margin="8,0,0,0"
+                                       Visibility="{Binding MenuExpandido, Converter={StaticResource BoolToVis}}" />
+                        </StackPanel>
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignFlatButton}">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding RolUsuario}" Value="Admin">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding RolUsuario}" Value="Recepcionista">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+
+                    <Button Command="{Binding NavegarCommand}" CommandParameter="CambiarPassword"
+                            Style="{StaticResource MaterialDesignFlatButton}" Foreground="White"
+                            HorizontalContentAlignment="Left" Margin="4,2">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="🔒" FontSize="16" Margin="4,0" />
+                            <TextBlock Text="Cambiar contraseña" Margin="8,0,0,0"
+                                       Visibility="{Binding MenuExpandido, Converter={StaticResource BoolToVis}}" />
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </DockPanel>
+        </materialDesign:ColorZone>
+
+        <!-- ═══ ÁREA PRINCIPAL: barra superior + contenido ═══ -->
+        <DockPanel Grid.Column="1">
+            <materialDesign:ColorZone DockPanel.Dock="Top" Mode="PrimaryMid" Padding="16,10">
+                <DockPanel>
+                    <Button DockPanel.Dock="Right"
+                            Style="{StaticResource MaterialDesignFlatButton}"
+                            Foreground="White"
+                            Command="{Binding CerrarSesionCommand}"
+                            Content="Cerrar sesión" />
+                    <TextBlock DockPanel.Dock="Right" Foreground="White" VerticalAlignment="Center"
+                               Margin="0,0,16,0">
+                        <Run Text="{Binding NombreUsuario, Mode=OneWay}" FontWeight="Bold" />
+                        <Run Text=" (" />
+                        <Run Text="{Binding RolUsuario, Mode=OneWay}" />
+                        <Run Text=")" />
+                    </TextBlock>
+                    <TextBlock Text="{Binding Titulo}" FontSize="18" Foreground="White"
+                               VerticalAlignment="Center" />
+                </DockPanel>
+            </materialDesign:ColorZone>
+
+            <ContentControl Content="{Binding VistaActual}" Margin="12" />
+        </DockPanel>
     </Grid>
 </Window>
