@@ -23,6 +23,22 @@ namespace SistemaResidencial.Data
             };
             context.Usuarios.Add(admin);
 
+            var recepcionista = new Usuario
+            {
+                NombreUsuario = "recepcionista",
+                PasswordHash = "recepcionista123",
+                Rol = Rol.Recepcionista
+            };
+            context.Usuarios.Add(recepcionista);
+
+            var usuario = new Usuario
+            {
+                NombreUsuario = "usuario",
+                PasswordHash = "usuario123",
+                Rol = Rol.Usuario
+            };
+            context.Usuarios.Add(usuario);
+
             var aptos = new Apartamento[]
             {
                 new Apartamento { Numero = "101", Piso = 1, Bloque = "A", NumHabitaciones = 2, MetrosCuadrados = 80, PrecioAlquiler = 500, Estado = EstadoApartamento.Disponible, Descripcion = "Apartamento amplio" },

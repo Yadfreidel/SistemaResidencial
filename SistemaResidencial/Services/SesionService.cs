@@ -18,16 +18,21 @@ namespace SistemaResidencial.Services
         /// </summary>
         public Rol RolActual => UsuarioActual?.Rol ?? Rol.Admin;
 
+        /// <summary>Evento que se dispara cuando cambia el estado de la sesión.</summary>
+        public event Action? SesionCambiada;
+
         /// <summary>Inicia sesión guardando el usuario autenticado.</summary>
         public void IniciarSesion(Usuario usuario)
         {
             UsuarioActual = usuario;
+            SesionCambiada?.Invoke();
         }
 
         /// <summary>Cierra la sesión actual, limpiando el usuario guardado.</summary>
         public void CerrarSesion()
         {
             UsuarioActual = null;
+            SesionCambiada?.Invoke();
         }
 
         /// <summary>Indica si hay una sesión activa.</summary>

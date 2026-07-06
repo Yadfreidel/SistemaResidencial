@@ -31,6 +31,10 @@ namespace SistemaResidencial.ViewModels
         [ObservableProperty]
         private bool _menuExpandido = true;
 
+        // Controla si el menú lateral es visible (solo cuando hay sesión activa)
+        [ObservableProperty]
+        private bool _menuVisible = false;
+
         public MainViewModel(NavigationService navegacionService, SesionService sesionService)
         {
             _navegacionService = navegacionService;
@@ -40,6 +44,9 @@ namespace SistemaResidencial.ViewModels
 
             // Suscribirse a cambios de vista desde el NavigationService
             _navegacionService.VistaActualCambiada += OnVistaActualCambiada;
+
+            // Suscribirse a cambios de sesión para actualizar UI cuando el usuario hace login/logout
+            _sesionService.SesionCambiada += OnSesionCambiada;
 
             // Cargar datos del usuario logueado
             CargarDatosUsuario();
@@ -54,6 +61,15 @@ namespace SistemaResidencial.ViewModels
         }
 
         /// <summary>
+        /// Se ejecuta cuando SesionService cambia el estado de la sesión (login/logout).
+        /// Actualiza los datos del usuario en la UI.
+        /// </summary>
+        private void OnSesionCambiada()
+        {
+            CargarDatosUsuario();
+        }
+
+        /// <summary>
         /// Carga los datos del usuario actualmente logueado desde SesionService.
         /// </summary>
         private void CargarDatosUsuario()
@@ -62,6 +78,13 @@ namespace SistemaResidencial.ViewModels
             {
                 NombreUsuario = _sesionService.UsuarioActual.NombreUsuario;
                 RolUsuario = _sesionService.RolActual.ToString();
+                MenuVisible = true;
+            }
+            else
+            {
+                NombreUsuario = string.Empty;
+                RolUsuario = string.Empty;
+                MenuVisible = false;
             }
         }
 

@@ -16,6 +16,7 @@ namespace SistemaResidencial.ViewModels
         private readonly IContratoRepository _contratoRepo;
         private readonly IPagoRepository _pagoRepo;
         private readonly SesionService _sesionService;
+        private readonly NavigationService _navigationService;
 
         // Nombre de bienvenida
         [ObservableProperty]
@@ -40,11 +41,13 @@ namespace SistemaResidencial.ViewModels
         public DashboardRecepcionistaViewModel(
             IContratoRepository contratoRepo,
             IPagoRepository pagoRepo,
-            SesionService sesionService)
+            SesionService sesionService,
+            NavigationService navigationService)
         {
             _contratoRepo = contratoRepo;
             _pagoRepo = pagoRepo;
             _sesionService = sesionService;
+            _navigationService = navigationService;
 
             Titulo = "Dashboard — Recepcionista";
         }
@@ -101,6 +104,42 @@ namespace SistemaResidencial.ViewModels
             {
                 EstaCargando = false;
             }
+        }
+
+        /// <summary>
+        /// Navega a la vista de Apartamentos.
+        /// </summary>
+        [RelayCommand]
+        private void IrAApartamentos()
+        {
+            _navigationService.Navegar("Apartamento");
+        }
+
+        /// <summary>
+        /// Navega a la vista de Inquilinos.
+        /// </summary>
+        [RelayCommand]
+        private void IrAInquilinos()
+        {
+            _navigationService.Navegar("Inquilino");
+        }
+
+        /// <summary>
+        /// Navega a la vista de Contratos.
+        /// </summary>
+        [RelayCommand]
+        private void IrAContratos()
+        {
+            _navigationService.Navegar("Contrato");
+        }
+
+        /// <summary>
+        /// Navega a la vista de Pagos.
+        /// </summary>
+        [RelayCommand]
+        private void IrAPagos()
+        {
+            _navigationService.Navegar("Pago");
         }
     }
 }
