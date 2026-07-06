@@ -1,10 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+using SistemaResidencial.Models;
 
 namespace SistemaResidencial.Interfaces
 {
-    internal class IContratoRepository
+    public interface IContratoRepository : IRepository<Contrato>
     {
+        List<Contrato> ObtenerContratosActivos();
+
+        bool TieneContratoActivo(int apartamentoId);
     }
 }

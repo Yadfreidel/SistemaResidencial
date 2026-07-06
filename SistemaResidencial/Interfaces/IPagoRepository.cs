@@ -1,10 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+using SistemaResidencial.Models;
 
 namespace SistemaResidencial.Interfaces
 {
-    internal class IPagoRepository
+    public interface IPagoRepository : IRepository<Pago>
     {
+        List<Pago> ObtenerPagosPorContrato(int contratoId);
+
+        bool PagoMesRegistrado(int contratoId, int mes, int anio);
     }
 }

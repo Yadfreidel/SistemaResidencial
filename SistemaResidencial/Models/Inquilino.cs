@@ -4,7 +4,7 @@ using System.Text;
 
 namespace SistemaResidencial.Models
 {
-    internal class Inquilino
+    public class Inquilino
     {
     }
 }

@@ -1,10 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+using SistemaResidencial.Models;
 
 namespace SistemaResidencial.Interfaces
 {
-    internal class IApartamentoRepository
+    // Repositorio específico de Apartamento.
+    // TODO: cambiar "string estado" por el enum EstadoApartamento cuando Ángel lo suba.
+    public interface IApartamentoRepository : IRepository<Apartamento>
     {
+        List<Apartamento> ObtenerPorEstado(string estado);
     }
 }
