@@ -1,10 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+using SistemaResidencial.Models;
 
 namespace SistemaResidencial.Interfaces
 {
-    internal class IInquilinoRepository
+    public interface IInquilinoRepository : IRepository<Inquilino>
     {
+        List<Inquilino> BuscarPorNombre(string nombre);
+
+        Inquilino? BuscarPorDocumento(string numeroDocumento);
     }
 }

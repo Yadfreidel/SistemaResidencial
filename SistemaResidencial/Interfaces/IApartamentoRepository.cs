@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+using SistemaResidencial.Models;
 
 namespace SistemaResidencial.Interfaces
 {
-    internal class IApartamentoRepository
+    public interface IApartamentoRepository : IRepository<Apartamento>
     {
+        List<Apartamento> ObtenerPorEstado(EstadoApartamento estado);
     }
 }
