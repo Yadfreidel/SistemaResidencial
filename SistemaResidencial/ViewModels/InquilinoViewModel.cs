@@ -63,6 +63,10 @@ namespace SistemaResidencial.ViewModels
 
         // ─── Campos de búsqueda ───────────────────────────────────────────────
 
+        // Búsqueda general (busca en todos los campos)
+        [ObservableProperty]
+        private string _busquedaGeneral = string.Empty;
+
         // Búsqueda por nombre o apellido
         [ObservableProperty]
         private string _busquedaNombre = string.Empty;
@@ -70,6 +74,18 @@ namespace SistemaResidencial.ViewModels
         // Búsqueda por número de documento
         [ObservableProperty]
         private string _busquedaDocumento = string.Empty;
+
+        // Filtro por tipo de documento
+        [ObservableProperty]
+        private TipoDocumento? _filtroTipoDocumento = null;
+
+        // Filtro por teléfono
+        [ObservableProperty]
+        private string _filtroTelefono = string.Empty;
+
+        // Filtro por email
+        [ObservableProperty]
+        private string _filtroEmail = string.Empty;
 
         // Copia completa de la lista para filtrado local
         private List<Inquilino> _inquilinosTodos = new();
@@ -274,9 +290,78 @@ namespace SistemaResidencial.ViewModels
         [RelayCommand]
         private void LimpiarBusqueda()
         {
+            BusquedaGeneral = string.Empty;
             BusquedaNombre = string.Empty;
             BusquedaDocumento = string.Empty;
+            FiltroTipoDocumento = null;
+            FiltroTelefono = string.Empty;
+            FiltroEmail = string.Empty;
             ActualizarLista(_inquilinosTodos);
+        }
+
+        /// <summary>
+        /// Búsqueda general que filtra por todos los campos disponibles.
+        /// </summary>
+        [RelayCommand]
+        private void BuscarGeneral()
+        {
+            if (string.IsNullOrWhiteSpace(BusquedaGeneral))
+            {
+                ActualizarLista(_inquilinosTodos);
+                return;
+            }
+
+            var termino = BusquedaGeneral.ToLower();
+            var resultados = _inquilinosTodos.Where(i =>
+                i.Nombre.ToLower().Contains(termino) ||
+                i.Apellido.ToLower().Contains(termino) ||
+                i.NumeroDocumento.ToLower().Contains(termino) ||
+                (i.Telefono != null && i.Telefono.ToLower().Contains(termino)) ||
+                (i.Email != null && i.Email.ToLower().Contains(termino))
+            ).ToList();
+
+            ActualizarLista(resultados);
+        }
+
+        /// <summary>
+        /// Aplica todos los filtros combinados.
+        /// </summary>
+        [RelayCommand]
+        private void AplicarFiltros()
+        {
+            var resultados = _inquilinosTodos.AsEnumerable();
+
+            if (!string.IsNullOrWhiteSpace(BusquedaNombre))
+            {
+                resultados = resultados.Where(i =>
+                    i.Nombre.ToLower().Contains(BusquedaNombre.ToLower()) ||
+                    i.Apellido.ToLower().Contains(BusquedaNombre.ToLower()));
+            }
+
+            if (!string.IsNullOrWhiteSpace(BusquedaDocumento))
+            {
+                resultados = resultados.Where(i =>
+                    i.NumeroDocumento.ToLower().Contains(BusquedaDocumento.ToLower()));
+            }
+
+            if (FiltroTipoDocumento.HasValue)
+            {
+                resultados = resultados.Where(i => i.TipoDocumento == FiltroTipoDocumento.Value);
+            }
+
+            if (!string.IsNullOrWhiteSpace(FiltroTelefono))
+            {
+                resultados = resultados.Where(i =>
+                    i.Telefono != null && i.Telefono.ToLower().Contains(FiltroTelefono.ToLower()));
+            }
+
+            if (!string.IsNullOrWhiteSpace(FiltroEmail))
+            {
+                resultados = resultados.Where(i =>
+                    i.Email != null && i.Email.ToLower().Contains(FiltroEmail.ToLower()));
+            }
+
+            ActualizarLista(resultados.ToList());
         }
 
         /// <summary>

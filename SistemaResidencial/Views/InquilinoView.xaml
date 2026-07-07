@@ -19,15 +19,25 @@
             <TextBlock DockPanel.Dock="Top" Text="{Binding Titulo}" FontSize="20" FontWeight="Bold" Margin="0,0,0,12" />
 
             <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,12">
-                <TextBox Width="180" materialDesign:HintAssist.Hint="Buscar por nombre"
+                <TextBox Width="200" materialDesign:HintAssist.Hint="Búsqueda general"
+                         Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                         Text="{Binding BusquedaGeneral, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,8,0" />
+                <Button Content="Buscar" Command="{Binding BuscarGeneralCommand}" Margin="0,0,8,0" />
+
+                <TextBox Width="150" materialDesign:HintAssist.Hint="Nombre"
                          Style="{StaticResource MaterialDesignOutlinedTextBox}"
                          Text="{Binding BusquedaNombre, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,8,0" />
-                <Button Content="Buscar" Command="{Binding BuscarPorNombreCommand}" Margin="0,0,8,0" />
 
-                <TextBox Width="180" materialDesign:HintAssist.Hint="Buscar por documento"
+                <TextBox Width="150" materialDesign:HintAssist.Hint="Documento"
                          Style="{StaticResource MaterialDesignOutlinedTextBox}"
                          Text="{Binding BusquedaDocumento, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,8,0" />
-                <Button Content="Buscar" Command="{Binding BuscarPorDocumentoCommand}" Margin="0,0,8,0" />
+
+                <ComboBox Width="120" materialDesign:HintAssist.Hint="Tipo doc."
+                          Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                          ItemsSource="{Binding ListaTiposDocumento}" SelectedItem="{Binding FiltroTipoDocumento}"
+                          Margin="0,0,8,0" />
+
+                <Button Content="Filtrar" Command="{Binding AplicarFiltrosCommand}" Margin="0,0,8,0" />
                 <Button Content="Limpiar" Command="{Binding LimpiarBusquedaCommand}" Margin="0,0,16,0" />
 
                 <Button Content="+ Agregar" Style="{StaticResource MaterialDesignRaisedButton}"
@@ -75,6 +85,23 @@
                              Style="{StaticResource MaterialDesignOutlinedTextBox}" Margin="0,0,8,0" />
                     <Button Content="..." Click="SeleccionarFoto_Click" />
                 </StackPanel>
+
+                <Border BorderBrush="LightGray" BorderThickness="1" Margin="0,0,0,12" 
+                        HorizontalAlignment="Center" Width="120" Height="120">
+                    <Image Source="{Binding FotoRuta, Mode=OneWay}" 
+                           Stretch="UniformToFill" 
+                           Width="120" Height="120">
+                        <Image.Style>
+                            <Style TargetType="Image">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding FotoRuta}" Value="{x:Null}">
+                                        <Setter Property="Source" Value="{x:Null}" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Image.Style>
+                    </Image>
+                </Border>
 
                 <TextBlock Text="{Binding MensajeError}" Foreground="Red" FontSize="12" TextWrapping="Wrap" Margin="0,0,0,8" />
 

@@ -42,7 +42,8 @@
                         Command="{Binding AlternarMenuCommand}"
                         Content="☰" />
 
-                <StackPanel DockPanel.Dock="Top">
+                <ScrollViewer DockPanel.Dock="Top" VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
                     <Button Command="{Binding NavegarCommand}" CommandParameter="DashboardAdmin"
                             Foreground="White"
                             HorizontalContentAlignment="Left" Margin="4,2">
@@ -206,7 +207,8 @@
                                        Visibility="{Binding MenuExpandido, Converter={StaticResource BoolToVis}}" />
                         </StackPanel>
                     </Button>
-                </StackPanel>
+                    </StackPanel>
+                </ScrollViewer>
             </DockPanel>
         </materialDesign:ColorZone>
 

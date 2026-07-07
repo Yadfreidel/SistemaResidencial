@@ -42,6 +42,9 @@ namespace SistemaResidencial.ViewModels
         private double _porcentajeOcupacion;
 
         [ObservableProperty]
+        private decimal _maxIngreso;
+
+        [ObservableProperty]
         private string _bienvenida = string.Empty;
 
         public DashboardAdminViewModel(
@@ -124,6 +127,7 @@ namespace SistemaResidencial.ViewModels
         private void CargarIngresoPorMes()
         {
             IngresoPorMes.Clear();
+            decimal maxIngreso = 0;
 
             for (int i = 5; i >= 0; i--)
             {
@@ -140,12 +144,17 @@ namespace SistemaResidencial.ViewModels
                         totalMes += contrato.MontoMensual;
                 }
 
+                if (totalMes > maxIngreso)
+                    maxIngreso = totalMes;
+
                 IngresoPorMes.Add(new IngresoMes
                 {
                     Mes = fecha.ToString("MMM yyyy"),
                     Total = totalMes
                 });
             }
+
+            MaxIngreso = maxIngreso > 0 ? maxIngreso : 1;
         }
 
         [RelayCommand]
